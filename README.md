@@ -36,6 +36,7 @@ This purely use for educational purposes only.
 3. Now install packages selenium and request 
  <br> -> pip install selenium
  <br> -> pip install requests
+ <br> -> pip install num2words
 
 # Usage:
 python3 CanvasBot.py

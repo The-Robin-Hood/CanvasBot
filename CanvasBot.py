@@ -140,17 +140,19 @@ else:
         data = json.load(f)
 
 import telebot
-
+from num2words import num2words
 EMAIL = data['Login']['Email']
 PASSWORD = data['Login']['Password']
-First = data['TimeAllotment']['1']
-Second = data['TimeAllotment']['2']
-Third = data['TimeAllotment']['3']
-Fourth = data['TimeAllotment']['4']
-Fifth = data['TimeAllotment']['5']
-Sixth = data['TimeAllotment']['6']
 
-Periods= [First,Second,Third,Fourth,Fifth,Sixth]
+Periods=[]
+for i in range(len(data['TimeAllotment'])):
+    temp = num2words(i+1,'ordinal')
+    exec("%s = %s" % (temp,data['TimeAllotment']['{}'.format(i+1)]))
+    Periods.append(globals()[temp])
+
+
+
+
 
 for num , i in enumerate(Periods):
     i.append(num)
@@ -163,6 +165,7 @@ for x , i in enumerate(Time_Table):
     for y , j in enumerate(i):
         Time_Table[x][y] = data['Courses'][j]
 
+print(Time_Table)
 #==================== initialization  ===========================#
 
 

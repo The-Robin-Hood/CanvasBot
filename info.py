@@ -78,5 +78,4 @@ def Collector():
     out_file = open("UserInfo.json", "w") 
     json.dump(data,out_file,indent = 3)
 
-Collector()
 
