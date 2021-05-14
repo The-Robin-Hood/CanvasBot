@@ -1,6 +1,5 @@
 <img src="CanvasBot.png"
-     alt="Canvas Bot icon"
-     style="width:350px"/>
+     alt="Canvas Bot icon" width="500px"/>
 
 # Description:
 This is an automated bot especially made for Students of Canvas Instructure.
