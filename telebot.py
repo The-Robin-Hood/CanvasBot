@@ -38,10 +38,10 @@ def get_last_chat_id_and_text(updates):
 
 #================ Manual Mode Initialization and Termination ================#
 def manual_Initialization():
-    send_message(f"Manually Assign a session \nEnter the Class Name\n{CourseAlign()}\n restart - To restart the process \n shutdown - To Kill the process completely")
+    send_message(f"Manually Assign a session \nEnter the Class Name\n{CourseAlign()}\nrestart - To restart the process \nterminate - To Kill the process completely \nshutdown - To shutdown the system")
     while True:
         Last_Msg = get_last_chat_id_and_text(command())
-        if Last_Msg in ['shutdown','restart']:
+        if Last_Msg in ['shutdown','restart','terminate']:
             break
         if Last_Msg in [i for i in botinfo()['Courses']]:
             print(botinfo()['Courses'][Last_Msg])
@@ -62,16 +62,17 @@ def dayorder():
     send_message("Send the Day Order \nterminate - to exit")
     while True:
         dayorder = get_last_chat_id_and_text(command())
-        if dayorder:
-            try:
+        if dayorder != None:
+            if dayorder in [x for x in botinfo()['DayOrder']]:
                 dayorder = int(dayorder)
-                if dayorder in [1,2,3,4,5,6]:
-                    dayorder = dayorder-1
-                    break
-            except:
-                if dayorder =='terminate':
+                dayorder = dayorder-1
+                break
+            elif dayorder =='terminate':
+                    send_message("Process Terminated")
                     exit()
-                send_message("Send the Dayorder (Example: 2)")
+            else:
+                DO =[x for x in botinfo()['DayOrder']]
+                send_message(f"Send the Dayorder {DO}")
     return dayorder
 
 #================ Course Align For message ================#

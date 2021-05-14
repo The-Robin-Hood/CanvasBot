@@ -56,18 +56,20 @@ def canvas(course,manual=False):
     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="___reactour"]/div[4]/div/div/div/span[1]/span/button').click()
     flag = False
-    for i in range(3):
+    for i in range(10):
         try:
             driver.find_element_by_xpath('//*[@id="course_home_content"]/div[2]/div[2]/div[2]/a').click()
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
             time.sleep(30)
-            print(driver.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/div/div/span/button[2]').click())
+            driver.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/div/div/span/button[2]').click()
             telebot.send_message("{} is being attended".format(Courses(past_session)))
             flag = True
             break
         except:
-            time.sleep(1)
+            if i==1:
+                telebot.send_message("Session Not yet started.Program waits for another 10mins")
+            time.sleep(60)
             driver.refresh()
     if not flag:
         telebot.send_message("{} is doesnt having join option".format(Courses(past_session)))
@@ -89,27 +91,22 @@ def canvas(course,manual=False):
                 canvas(Period_Checker())
             else:
                 print(Courses(Period_Checker())+" is on live",end='\r')
-        
-
-        
-
-#================== main =====================#
+  
+#================== Main =====================#
 def main():
     global past_session
     while True:
         if Period_Checker() :
-            print(Period_Checker())
             past_session = Period_Checker()
-            print(f"{Courses(past_session)}")
             mode = canvas(past_session)
             if mode == 'Manual':
                 val = telebot.manual_Initialization()
-                if val in ['restart']:
+                if val =='restart':
                     telebot.send_message("Process is restarted. Switching to Automatic Mode")
                     break
                 elif val == 'shutdown':
                     import os
-                    os.system('shudown /s')
+                    os.system('shutdown /s')
                     telebot.send_message("Shutting Down the System")
                     exit()
                 else:
@@ -118,16 +115,19 @@ def main():
         else:
             telebot.send_message("No Class at this Time")
             val = telebot.manual_Initialization()
-            if val in ['terminate']:
-                telebot.send_message("Process is terminated. Will be initiated by tomorrow")
+            if val == 'restart':
+                telebot.send_message("Process is restarted. Switching to Automatic Mode")
+                break
+            elif val == 'terminate':
+                telebot.send_message("Process Terminated")
                 exit()
             elif val == 'shutdown':
                     import os
-                    os.system('shudown /s')
+                    os.system('shutdown /s')
                     telebot.send_message("Shutting Down the System")
                     exit()
             else:
-                past_session = globals()[val]
+                past_session = val
                 canvas(past_session,manual=True)
 
 #==================== User details ===========================#
@@ -150,10 +150,6 @@ for i in range(len(data['TimeAllotment'])):
     exec("%s = %s" % (temp,data['TimeAllotment']['{}'.format(i+1)]))
     Periods.append(globals()[temp])
 
-
-
-
-
 for num , i in enumerate(Periods):
     i.append(num)
 
@@ -165,14 +161,13 @@ for x , i in enumerate(Time_Table):
     for y , j in enumerate(i):
         Time_Table[x][y] = data['Courses'][j]
 
-print(Time_Table)
 #==================== initialization  ===========================#
-
-
 while True:
-    if datetime.datetime.today().weekday() != 4:
+    if datetime.datetime.today().weekday() != 6:
         dayorder = telebot.dayorder()
         main()
         time.sleep(3)
+    else:
+        print("Sunday Enna Hair ku da Class ?")
 
 
